@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php'; // Ensure this loads .env variables properly
+require_once 'config.php'; 
 
 class RevolutCapture {
     private $apiUrl;

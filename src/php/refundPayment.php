@@ -1,20 +1,16 @@
 <?php
-require_once 'config.php'; // Ensure this loads .env variables properly
-
+require_once 'config.php'; 
 class refundApi {
     private $apiUrl;
     private $apiKey;
 
     public function __construct() {
-        // Load API credentials from environment variables
         $this->apiUrl = getenv('REVOLUT_API_BASE_URL') ?: ($_ENV['REVOLUT_API_BASE_URL'] ?? REVOLUT_API_BASE_URL);
         $this->apiKey = getenv('REVOLUT_API_KEY') ?: ($_ENV['REVOLUT_API_KEY'] ?? '');
 
-        // Ensure values are properly formatted
         $this->apiUrl = rtrim($this->apiUrl, '/');
         $this->apiKey = trim($this->apiKey);
 
-        // Validate credentials
         if (empty($this->apiUrl) || empty($this->apiKey)) {
             error_log("⚠️ Error: API credentials missing.");
             throw new Exception("API credentials are missing. Please check your environment settings.");
@@ -22,7 +18,7 @@ class refundApi {
     }
 
     private function sendRequest($endpoint, $method, $data = []) {
-        $url = "{$this->apiUrl}$endpoint"; // Ensure correct API structure
+        $url = "{$this->apiUrl}$endpoint"; 
         $ch = curl_init($url);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -64,7 +60,7 @@ class refundApi {
         }
 
         $data = [
-            'amount' => $amount, // Amount in minor units (e.g., cents)
+            'amount' => $amount, 
             'description' => $description
         ];
 

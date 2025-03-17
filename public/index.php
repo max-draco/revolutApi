@@ -22,31 +22,27 @@ $routes = [
     ]
 ];
 
-// Get the request URI and method
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-// Remove query strings if any
 $requestUri = strtok($requestUri, '?');
 
-// Check if route exists
+
 if (!isset($routes[$requestMethod][$requestUri])) {
     http_response_code(404);
     echo json_encode(['error' => 'Invalid API route']);
     exit;
 }
 
-// Read JSON input
+
 $inputData = json_decode(file_get_contents("php://input"), true);
 
-// Validate JSON input
 if (json_last_error() !== JSON_ERROR_NONE) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid JSON payload']);
     exit;
 }
 
-// Route handling
 $response = null;
 
 switch ($routes[$requestMethod][$requestUri]) {
@@ -119,7 +115,6 @@ switch ($routes[$requestMethod][$requestUri]) {
         break;
 }
 
-// Ensure a valid response is returned
 if (is_array($response) && isset($response['status_code'])) {
     http_response_code($response['status_code']);
     echo json_encode($response, JSON_PRETTY_PRINT);
