@@ -1,5 +1,4 @@
 <?php
-// Get parameters from URL
 $orderId = $_GET['orderId'] ?? 'N/A';
 $amount = isset($_GET['amount']) ? number_format($_GET['amount'] / 100, 2) : 'N/A';
 $currency = $_GET['currency'] ?? 'GBP';
@@ -12,7 +11,6 @@ $currency = $_GET['currency'] ?? 'GBP';
     <title>Payment Successful</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <?php
-    // Include the bundled CSS
     $cssFiles = glob('dist/css/*.css');
     foreach ($cssFiles as $css) {
         echo '<link rel="stylesheet" href="' . $css . '">';
@@ -50,7 +48,6 @@ $currency = $_GET['currency'] ?? 'GBP';
     </div>
     
     <?php
-    // Include the bundled JS
     $jsFiles = glob('dist/js/*.js');
     foreach ($jsFiles as $js) {
         echo '<script src="' . $js . '"></script>';

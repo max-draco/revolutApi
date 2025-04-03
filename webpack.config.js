@@ -3,19 +3,19 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
-const CopyPlugin = require("copy-webpack-plugin") // Add this import
+const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
   mode: "production",
   entry: "./index.js",
   output: {
-    path: path.resolve(__dirname, "app"), // Changed from "dist" to "app"
-    filename: "assets/js/[name].[contenthash].js", // Updated path
+    path: path.resolve(__dirname, "app"),
+    filename: "assets/js/[name].[contenthash].js", 
     publicPath: "/",
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, "app"), // Changed from "dist" to "app"
+      directory: path.join(__dirname, "app"), 
     },
     compress: true,
     port: 9000,
@@ -57,14 +57,14 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
         generator: {
-          filename: "assets/images/[name].[hash][ext]", // Updated path
+          filename: "assets/images/[name].[hash][ext]",
         },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: "asset/resource",
         generator: {
-          filename: "assets/fonts/[name].[hash][ext]", // Updated path
+          filename: "assets/fonts/[name].[hash][ext]",
         },
       },
     ],
@@ -72,14 +72,14 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [
-        "**/*", // Clean everything in the output directory
-        "!.gitkeep" // Except .gitkeep if you have it
+        "**/*",
+        "!.gitkeep" 
       ]
     }),
     new MiniCssExtractPlugin({
-      filename: "assets/css/[name].[contenthash].css", // Updated path
+      filename: "assets/css/[name].[contenthash].css", 
     }),
-    // Add CopyPlugin to copy PHP files
+
     new CopyPlugin({
       patterns: [
         { 
@@ -87,7 +87,7 @@ module.exports = {
           to: path.resolve(__dirname, "app"),
           context: "."
         },
-        // If you have other files to copy, add them here
+      
         { 
           from: "process_payment.php", 
           to: path.resolve(__dirname, "app"),
@@ -95,7 +95,7 @@ module.exports = {
         },
       ],
     }),
-    // Update HTML templates to output to app directory
+    
     new HtmlWebpackPlugin({
       template: "./templates/custform.html",
       filename: "custform.html",

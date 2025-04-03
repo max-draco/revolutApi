@@ -11,7 +11,6 @@ $code = $_GET['code'] ?? 'UNKNOWN_ERROR';
     <title>Payment Failed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <?php
-    // Include the bundled CSS
     $cssFiles = glob('dist/css/*.css');
     foreach ($cssFiles as $css) {
         echo '<link rel="stylesheet" href="' . $css . '">';
@@ -39,7 +38,6 @@ $code = $_GET['code'] ?? 'UNKNOWN_ERROR';
     </div>
     
     <?php
-    // Include the bundled JS
     $jsFiles = glob('dist/js/*.js');
     foreach ($jsFiles as $js) {
         echo '<script src="' . $js . '"></script>';

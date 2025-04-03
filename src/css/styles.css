@@ -407,7 +407,6 @@ select:focus {
   }
 }
 
-/* Responsive design */
 @media (max-width: 576px) {
   .container {
     padding: 1.5rem;

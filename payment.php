@@ -1,5 +1,4 @@
 <?php
-// Get card details from POST or set defaults for testing
 $reservationNumber = $_POST["resnumber"] ?? 'RC87687IW';
 $itemNumber = $_POST["itemnumber"] ?? 'CDAR7869879';
 $firstName = $_POST["firstname"] ?? 'Richard';
@@ -12,25 +11,20 @@ $amount = $_POST["amount"] ?? '10.00';
 $currency = $_POST["currency"] ?? 'GBP';
 $email = $_POST["email"] ?? 'customer@example.com';
 
-// Convert amount to pennies for Revolut API
 $amountInPennies = round(floatval($amount));
 
-// Create a unique order ID if not provided
 $orderId = $_POST["order_id"] ?? 'ORD-' . time() . '-' . rand(100, 999);
 
-// Prepare the request payload for Revolut API - using the exact format provided
 $requestPayload = [
     'amount' => $amountInPennies,
     'currency' => $currency,
-    'customer' => '5322cbc3-0add-4b52-8ce1-a3f4f66ad045', // Using the customer ID provided
+    'customer' => '5322cbc3-0add-4b52-8ce1-a3f4f66ad045', 
     'capture_mode' => 'manual'
 ];
 
-// For debugging purposes
 $debug = false;
 
 if (!$debug) {
-    // Make the API request to pay.muslih.tech/api/orders
     $ch = curl_init('https://pay.muslih.tech/api/orders');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -51,26 +45,20 @@ if (!$debug) {
     
     curl_close($ch);
     
-    // Parse the response
     $responseData = json_decode($response, true);
     
-    // Check if we have a token for the Revolut checkout (based on the sample response)
     if ($httpCode >= 200 && $httpCode < 300 && isset($responseData['response']['token'])) {
         $token = $responseData['response']['token'];
         $paymentId = $responseData['response']['id'] ?? '';
     } else {
-        // Handle API error
         $errorMessage = $responseData['message'] ?? 'Unknown error occurred';
         header("Location: error.php?message=" . urlencode($errorMessage) . "&code=" . urlencode($responseData['code'] ?? 'API_ERROR'));
         exit;
     }
 } else {
-    // For debugging - simulate a successful response
     $token = 'test_token';
     $paymentId = 'test-payment-id';
 }
-
-// Format card number for display (mask all but last 4 digits)
 $formattedCard = chunk_split(str_replace(' ', '', $cardNumber), 4, ' ');
 $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
 ?>
@@ -82,13 +70,11 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
     <title>Process Payment</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <?php
-    // Include the bundled CSS - updated path for webpack
     $cssFiles = glob('assets/css/*.css');
     foreach ($cssFiles as $css) {
         echo '<link rel="stylesheet" href="/' . $css . '">';
     }
     ?>
-    <!-- Add official Revolut Checkout embed script -->
     <script>
         !function(e,o,t){var n={sandbox:"https://sandbox-merchant.revolut.com/embed.js",prod:"https://merchant.revolut.com/embed.js"},r={sandbox:"https://sandbox-merchant.revolut.com/upsell/embed.js",prod:"https://merchant.revolut.com/upsell/embed.js"},l=function(e){var n=function(e){var t=o.createElement("script");return t.id="revolut-checkout",t.src=e,t.async=!0,o.head.appendChild(t),t}(e);return new Promise((function(e,r){n.onload=()=> e(),n.onerror=()=> {o.head.removeChild(n),r(new Error(t+" failed to load"))}}))},u=function(){if(window.RevolutCheckout===i||!window.RevolutCheckout)throw new Error(t+" failed to load")},c={},d={},i=function o(r,d){return c[d=d||"prod"]?Promise.resolve(c[d](r)):l(n[d]).then((function(){return u(),c[d]=window.RevolutCheckout,e[t]=o,c[d](r)}))};i.payments=function(o){var r=o.mode||"prod",d={locale:o.locale||"auto",publicToken:o.publicToken||null};return c[r]?Promise.resolve(c[r].payments(d)):l(n[r]).then((function(){return u(),c[r]=window.RevolutCheckout,e[t]=i,c[r].payments(d)}))},i.upsell=function(e){var o=e.mode||"prod",n={locale:e.locale||"auto",publicToken:e.publicToken||null};return d[o]?Promise.resolve(d[o](n)):l(r[o]).then((function(){if(!window.RevolutUpsell)throw new Error(t+" failed to load");return d[o]=window.RevolutUpsell,delete window.RevolutUpsell,d[o](n)}))},e[t]=i}(window,document,"RevolutCheckout");
     </script>
@@ -99,9 +85,7 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
             <h1>Complete Your Payment</h1>
             <p>Please review your order details before proceeding</p>
         </div>
-        
-        <!-- Card Display -->
-        <div class="card-display">
+                <div class="card-display">
             <div class="card-brand">
                 <i class="fab fa-cc-visa"></i>
             </div>
@@ -142,7 +126,6 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
     </div>
     
     <script>
-    // Store card details in JavaScript variables for direct access
     const cardDetails = {
         token: "<?php echo htmlspecialchars($token); ?>",
         paymentId: "<?php echo htmlspecialchars($paymentId); ?>",
@@ -154,28 +137,24 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
         currency: "<?php echo htmlspecialchars($currency); ?>"
     };
     
-    // Inline script to handle the payment process
     document.addEventListener('DOMContentLoaded', function() {
         const payButton = document.getElementById('pay-button');
         const messageDiv = document.getElementById('message');
         
         if (!payButton) return;
         
-        // Auto-trigger the payment process when the page loads
+
         setTimeout(function() {
             processPayment();
-        }, 1000); // Short delay to ensure everything is loaded
+        }, 1000); 
         
-        // Also allow manual triggering
         payButton.addEventListener('click', function() {
             processPayment();
         });
         
         function processPayment() {
             const buttonText = document.getElementById('button-text');
-            
-            // Show loading state
-            buttonText.innerHTML = '<span class="loader"></span> Processing...';
+                        buttonText.innerHTML = '<span class="loader"></span> Processing...';
             payButton.disabled = true;
             
             console.log("Initializing payment with token:", cardDetails.token);
@@ -186,30 +165,24 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
                 cvv: cardDetails.cvv
             });
             
-            // Initialize Revolut Checkout with the token
             window.RevolutCheckout(cardDetails.token, 'sandbox')
                 .then(function(instance) {
                     console.log("Revolut instance created successfully");
                     
-                    // Open the payment popup with card details
                     instance.payWithPopup({
-                        // Pass card details to Revolut
                         prefill: {
                             cardNumber: cardDetails.cardNumber,
                             expiryMonth: cardDetails.expiryMonth,
                             expiryYear: cardDetails.expiryYear,
                             cvv: cardDetails.cvv
                         },
-                        // Save payment method for future
                         savePaymentMethodFor: 'merchant',
-                        // Handle successful payment
                         onSuccess() {
                             console.log('Payment successful');
                             messageDiv.className = 'success';
                             messageDiv.textContent = 'Payment successful! Redirecting...';
                             messageDiv.style.display = 'block';
                             
-                            // Redirect to success page with payment ID
                             setTimeout(function() {
                                 window.location.href = 'success.php?orderId=' + 
                                     encodeURIComponent(cardDetails.paymentId) + 
@@ -217,7 +190,7 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
                                     '&currency=' + encodeURIComponent(cardDetails.currency);
                             }, 2000);
                         },
-                        // Handle payment errors
+  
                         onError(error) {
                             console.error('Payment error:', error);
                             buttonText.textContent = 'Complete Payment';
@@ -227,7 +200,6 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
                             messageDiv.textContent = 'Payment error: ' + error.message;
                             messageDiv.style.display = 'block';
                         },
-                        // Handle user cancellation
                         onCancel() {
                             console.log('Payment cancelled');
                             buttonText.textContent = 'Complete Payment';
@@ -250,7 +222,6 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
                 });
         }
         
-        // Handle cancel button click - updated to go to custform.html
         const cancelButton = document.getElementById('cancel-button');
         if (cancelButton) {
             cancelButton.addEventListener('click', function() {
@@ -261,7 +232,6 @@ $maskedCard = preg_replace('/\d(?=\d{4})/', '*', $formattedCard);
     </script>
     
     <?php
-    // Include the bundled JS - updated path for webpack
     $jsFiles = glob('assets/js/*.js');
     foreach ($jsFiles as $js) {
         echo '<script src="/' . $js . '">';
