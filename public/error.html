@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Failed | Revolut API Testing</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .error-icon {
+      font-size: 5rem;
+      color: var(--danger-color);
+      margin-bottom: 1.5rem;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    .error-title {
+      font-size: 2rem;
+      color: var(--danger-color);
+      margin-bottom: 1rem;
+    }
+    
+    .error-message {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+    
+    .error-details {
+      background-color: rgba(213, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    
+    .error-code {
+      font-family: monospace;
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .disclaimer-container {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 0.25rem;
+      text-align: center;
+    }
+
+    .disclaimer {
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="url-bar">
+    <div class="url-content">
+      <i class="fas fa-lock"></i>
+      <span>https://pay.muslih.tech</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="/placeholder.svg?height=40&width=40" alt="Logo">
+        <h1>Revolut API Testing Dashboard</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="error-container">
+      <i class="fas fa-times-circle error-icon"></i>
+      <h2 class="error-title">Payment Failed</h2>
+      <p class="error-message">Your payment could not be processed. Please check your payment details and try again.</p>
+      
+      <div class="error-details">
+        <h3>Error Details:</h3>
+        <p id="errorMessage">Your credit card has been declined.</p>
+        <p class="error-code" id="errorCode">Error code: CARD_DECLINED</p>
+      </div>
+      
+      <div class="buttons">
+        <a href="index.html" class="btn-secondary">Return to Dashboard</a>
+        <a href="index.html" class="btn-primary">Try Again</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="disclaimer-container">
+    <div class="container">
+      <p class="disclaimer">
+        <strong>CAUTION:</strong> This is a testing tool for Revolut API integration demonstration purposes only. 
+        Not for production use. All transactions are simulated.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      if (urlParams.has('message')) {
+        document.getElementById('errorMessage').textContent = urlParams.get('message');
+      }
+      
+      if (urlParams.has('code')) {
+        document.getElementById('errorCode').textContent = `Error code: ${urlParams.get('code')}`;
+      }
+    });
+  </script>
+</body>
+</html>
+
