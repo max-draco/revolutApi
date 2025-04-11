@@ -1,6 +1,4 @@
 <?php
-// This file serves as a PHP wrapper around the HTML template
-// It will include the bundled assets from webpack
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +8,6 @@
     <title>Payment Information</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <?php
-    // Include the bundled CSS
     $cssFiles = glob('dist/css/*.css');
     foreach ($cssFiles as $css) {
         echo '<link rel="stylesheet" href="' . $css . '">';
@@ -25,7 +22,6 @@
         </div>
         
         <form action="payment.php" method="post">
-            <!-- Reservation and Item Information -->
             <div class="form-group">
                 <label for="resnumber">Reservation Number</label>
                 <input type="text" id="resnumber" name="resnumber" value="RC87687IW" required>
@@ -36,7 +32,6 @@
                 <input type="text" id="itemnumber" name="itemnumber" value="CDAR7869879" required>
             </div>
             
-            <!-- Personal Information -->
             <div class="form-row">
                 <div class="form-col">
                     <div class="form-group">
@@ -56,9 +51,7 @@
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" value="customer@example.com" required>
             </div>
-            
-            <!-- Payment Information -->
-            <div class="form-group">
+                        <div class="form-group">
                 <label for="cardnop">Card Number</label>
                 <div class="input-wrapper">
                     <input type="text" id="cardnop" name="cardnop" value="1212121212121212" maxlength="16" required>
@@ -103,9 +96,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Amount Information -->
-            <div class="form-row">
+                        <div class="form-row">
                 <div class="form-col">
                     <div class="form-group">
                         <label for="amount">Amount</label>
@@ -133,7 +124,6 @@
     </div>
     
     <?php
-    // Include the bundled JS
     $jsFiles = glob('dist/js/*.js');
     foreach ($jsFiles as $js) {
         echo '<script src="' . $js . '"></script>';
